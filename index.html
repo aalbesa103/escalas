@@ -1,1 +1,2179 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Pequeño Mundo Que Nos Rodea: Comprendiendo las Escalas de la Materia</title>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- Google Fonts: Montserrat (títulos) y Open Sans (texto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base para el cuerpo y contenedor principal */
+        body, html {
+            margin: 0;
+            padding: 0;
+            /* Eliminado height: 100% y overflow: hidden para permitir el scroll */
+            font-family: 'Open Sans', sans-serif; /* Fuente principal para el cuerpo del texto */
+            color: #ffffff; /* Texto blanco por defecto */
+            background: linear-gradient(135deg, #003366, #00468B); /* Gradiente azul oscuro como fondo */
+            scroll-behavior: smooth;
+        }
+
+        .main-container {
+            width: 95%;
+            max-width: 1400px; /* Un poco más amplio para el contenido */
+            margin: 30px auto;
+            background-color: rgba(0, 52, 102, 0.98); /* Mayor opacidad para el fondo de las secciones */
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4); /* Sombra más pronunciada para la caja principal */
+            padding: 40px;
+            position: relative;
+            z-index: 1; /* Para estar por encima del patrón de fondo */
+        }
+
+        /* Fondo con patrón sutil (adaptado para no ser fijo si la página es scrollable) */
+        .pattern-bg {
+            position: fixed; /* Fijo para que no se desplace con el contenido */
+            width: 100%;
+            height: 100%;
+            opacity: 0.08; /* Muy sutil */
+            background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: 0; /* Detrás del contenido principal */
+        }
+
+        /* Estilos de encabezados */
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 3.8em;
+            color: #FFC845; /* Amarillo brillante para el título principal */
+            padding-bottom: 25px;
+            border-bottom: 4px solid #FFC845;
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            color: #FFC845;
+            margin-top: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        h3 {
+            font-size: 2.2em;
+            color: #ADD8E6; /* Azul claro para subsecciones */
+            margin-top: 50px;
+            text-align: left;
+            border-left: 6px solid #FFC845; /* Barra lateral amarilla */
+            padding-left: 20px;
+        }
+
+        p {
+            font-size: 1.15em;
+            margin-bottom: 18px;
+            text-align: justify;
+            color: #F0F8FF; /* Blanco suave */
+        }
+
+        .highlight {
+            color: #FFC845; /* Amarillo para texto resaltado */
+            font-weight: 600;
+        }
+
+        .section-block {
+            padding: 40px;
+            margin-bottom: 70px;
+            background-color: rgba(0, 40, 80, 0.9); /* Mayor opacidad para fondo de secciones */
+            border-radius: 10px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3); /* Sombra interna para profundidad */
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- Estilos de la Escalera de Medición (Sección 1) --- */
+        .measurement-ladder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .unit-step {
+            background-color: rgba(0, 60, 120, 0.95); /* Mayor opacidad */
+            color: white;
+            padding: 15px 30px;
+            margin: 10px 0;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.3em;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Regla interactiva */
+        .ruler-interactive {
+            width: 90%;
+            max-width: 800px;
+            height: 70px;
+            background-color: rgba(255,255,255,0.15); /* Mayor opacidad */
+            border: 2px solid rgba(255,255,255,0.4); /* Mayor opacidad */
+            border-radius: 8px;
+            position: relative;
+            margin-top: 40px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .cm-mark {
+            position: absolute;
+            height: 100%;
+            width: 3px;
+            background-color: #FFC845; /* Marcas amarillas */
+        }
+
+        .cm-label {
+            position: absolute;
+            top: 8px;
+            font-size: 1em;
+            color: #FFC845;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .mm-segment {
+            flex-grow: 1;
+            height: 100%;
+            background-color: #2ecc71; /* Verde */
+            border-right: 1px solid rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1em;
+            cursor: ew-resize;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .mm-segment:last-child {
+            border-right: none;
+        }
+        .mm-segment:hover {
+            background-color: #27ae60; /* Verde oscuro al pasar el ratón */
+            transform: scale(1.03);
+        }
+        .mm-segment.active {
+            background-color: #e74c3c; /* Rojo cuando está activo */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .zoom-question {
+            margin-top: 35px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.3em;
+            color: #F0F8FF;
+        }
+
+        .zoom-answer {
+            text-align: center;
+            margin-top: 25px;
+            color: #FFC845; /* Amarillo para la respuesta */
+            font-weight: 700;
+            font-size: 1.5em;
+            background-color: rgba(255, 200, 69, 0.3); /* Mayor opacidad */
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid #FFC845;
+        }
+
+        /* Icono de la regla en la sección 1 */
+        .ruler-section-icon {
+            font-size: 10em; /* Icono grande */
+            color: #ADD8E6; /* Azul claro */
+            margin-top: 40px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* --- Estilos de la Barra de Escala (Sección 2 - General de Escalas) --- */
+        .scale-bar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            justify-items: center;
+        }
+
+        .scale-item {
+            width: 100%;
+            height: 220px;
+            background-color: rgba(0, 60, 120, 0.95); /* Mayor opacidad */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .scale-item:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 80, 160, 0.98); /* Mayor opacidad */
+        }
+
+        .scale-item .icon {
+            font-size: 4.5em;
+            margin-bottom: 12px;
+            color: #FFC845; /* Iconos amarillos */
+            line-height: 1;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .scale-item span {
+            font-weight: 600;
+            font-size: 1.2em;
+            color: #F0F8FF;
+        }
+
+        .scale-description-display {
+            margin-top: 50px;
+            padding: 30px;
+            background-color: rgba(0, 45, 90, 0.98); /* Mayor opacidad */
+            border: 2px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+            border-radius: 15px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.2em;
+            color: #ADD8E6;
+            transition: all 0.4s ease-in-out;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .scale-description-display .icon {
+            font-size: 7em;
+            margin-bottom: 20px;
+            color: #FFC845;
+            line-height: 1;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .scale-description-display h4 {
+            color: #FFC845;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* --- Estilos de la Diapositiva Macroscópica (Sección 2.1) --- */
+        .macroscopic-slide-container {
+            display: flex;
+            flex-direction: row;
+            height: auto; /* Ajuste automático para el contenido */
+            width: 100%;
+            gap: 30px; /* Espacio entre columnas */
+        }
+        .macroscopic-left-col {
+            width: 45%; /* Ajuste de ancho */
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+        .macroscopic-right-col {
+            width: 55%; /* Ajuste de ancho */
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .macroscopic-object-card {
+            background-color: rgba(0, 60, 120, 0.9); /* Mayor opacidad */
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .macroscopic-object-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); /* Sombra más pronunciada */
+            background-color: rgba(0, 70, 140, 0.98); /* Mayor opacidad */
+        }
+        .macroscopic-object-card.ring-4 {
+            border: 4px solid #FFC845; /* Borde amarillo para el activo */
+            box-shadow: 0 0 20px rgba(255, 200, 69, 0.9); /* Sombra más fuerte y opaca */
+            background-color: rgba(0, 70, 140, 0.99); /* Mayor opacidad */
+        }
+        .macroscopic-object-card .text-3xl { /* Iconos dentro de las tarjetas */
+            color: #FFC845;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .macroscopic-object-card h3 {
+            color: white;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        .macroscopic-object-card p {
+            color: #ADD8E6;
+            font-size: 0.9em;
+            margin-bottom: 0;
+        }
+
+        .macroscopic-display-area {
+            height: 300px; /* Altura fija para el área de visualización */
+            background-color: rgba(0, 52, 102, 0.9); /* Mayor opacidad */
+            border-radius: 10px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5); /* Sombra más opaca */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+        }
+        .macroscopic-display-area .display-icon {
+            font-size: 8em; /* Icono grande en el display */
+            color: #FFC845;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .macroscopic-display-area .size-indicator {
+            color: #FFC845;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-top: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .macroscopic-display-area .description-text {
+            color: #ADD8E6;
+            font-size: 1em;
+            margin-top: 5px;
+        }
+
+        .macroscopic-scale-bar {
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.25); /* Mayor opacidad */
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.4); /* Sombra más opaca */
+        }
+        .macroscopic-scale-bar .absolute.inset-0.flex > div {
+            border-right: 1px solid rgba(255,255,255,0.2); /* Líneas divisorias más suaves, mayor opacidad */
+        }
+        .macroscopic-scale-highlight {
+            position: absolute;
+            height: 100%;
+            background-color: rgba(255, 200, 69, 0.4); /* Mayor opacidad */
+            transition: width 0.5s ease, left 0.5s ease;
+            border-radius: 20px;
+            border: 1px solid #FFC845;
+        }
+        .macroscopic-scale-marker {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .macroscopic-scale-marker-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #FFC845;
+            margin-bottom: 5px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            border: 2px solid rgba(0,0,0,0.4); /* Mayor opacidad */
+        }
+        .macroscopic-scale-marker-dot:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255, 200, 69, 1);
+        }
+        .macroscopic-scale-marker-dot.active-dot {
+            background-color: #FFF;
+            box-shadow: 0 0 15px rgba(255, 200, 69, 1);
+            transform: scale(1.4);
+        }
+        .macroscopic-scale-marker-label {
+            font-size: 0.8em;
+            color: white;
+            white-space: nowrap;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .macroscopic-comparison-box {
+            background-color: rgba(0, 52, 102, 0.9); /* Mayor opacidad */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Sombra más opaca */
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+        }
+        .macroscopic-comparison-box h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #FFC845;
+            border-left: none;
+            padding-left: 0;
+        }
+        .macroscopic-comparison-box .relative-dot {
+            border-radius: 50%;
+            background-color: #FFC845;
+            margin: 0 auto;
+            border: 1px solid rgba(0,0,0,0.3);
+        }
+        .macroscopic-comparison-box p {
+            font-size: 0.8em;
+            color: #ADD8E6;
+            margin-top: 5px;
+        }
+
+        /* --- Estilos del Mundo Microscópico (Nueva Sección) --- */
+        .microscopic-slide-container {
+            display: flex;
+            flex-direction: row;
+            height: auto;
+            width: 100%;
+            gap: 30px;
+        }
+        .microscopic-left-col {
+            width: 45%;
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+        .microscopic-right-col {
+            width: 55%;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .micro-object-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Más compacto */
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .micro-object-card {
+            background-color: rgba(0, 60, 120, 0.9); /* Mayor opacidad */
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4); /* Mayor opacidad */
+        }
+        .micro-object-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5); /* Mayor opacidad */
+            background-color: rgba(0, 70, 140, 0.98); /* Mayor opacidad */
+        }
+        .micro-object-card.active-micro {
+            border: 3px solid #FFC845; /* Borde amarillo para activo */
+            box-shadow: 0 0 15px rgba(255, 200, 69, 0.9); /* Mayor opacidad */
+            background-color: rgba(0, 70, 140, 0.99); /* Mayor opacidad */
+        }
+        .micro-object-card .icon-display {
+            font-size: 3.5em; /* Tamaño del icono en la tarjeta */
+            color: #FFC845;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .micro-object-card h3 {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            margin: 0;
+            text-align: center;
+        }
+        .micro-object-card p {
+            font-size: 0.75em;
+            color: #ADD8E6;
+            margin-top: 2px;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .comparison-container {
+            position: relative;
+            height: 280px; /* Más altura para los elementos */
+            background-color: rgba(0, 52, 102, 0.9); /* Mayor opacidad */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5); /* Mayor opacidad */
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+            margin-top: 20px; /* Espacio superior */
+        }
+        .comparison-container h3 {
+            font-size: 1.8em; /* Ajustado para consistencia */
+            text-align: center;
+            padding: 15px;
+            color: #FFC845;
+            border-bottom: 1px solid rgba(255,255,255,0.2); /* Mayor opacidad */
+            margin-bottom: 0;
+            border-left: none; /* Eliminar barra lateral */
+            padding-left: 15px;
+        }
+        .comparison-bar {
+            position: absolute;
+            bottom: 0px; /* Ajustado a la base del contenedor */
+            left: 0;
+            width: 100%;
+            height: 80px; /* Altura de la barra con marcas */
+            background-color: rgba(0, 30, 60, 0.9); /* Mayor opacidad */
+            display: flex;
+            align-items: flex-end;
+            padding: 0 20px;
+            box-sizing: border-box;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        .scale-ruler {
+            position: absolute;
+            bottom: 5px; /* Más cerca de la base de la barra */
+            left: 20px;
+            right: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .scale-mark {
+            position: absolute;
+            height: 12px;
+            width: 2px;
+            background-color: rgba(255, 255, 255, 0.85); /* Mayor opacidad */
+            bottom: 0;
+        }
+        .scale-label {
+            position: absolute;
+            bottom: -20px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.85); /* Mayor opacidad */
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+        .comparison-item-display {
+            position: absolute;
+            bottom: 80px; /* Por encima de la barra */
+            transition: all 0.5s ease-in-out;
+            opacity: 0;
+            transform: translateY(20px); /* Empieza ligeramente abajo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end; /* Para que el contenido se alinee a la barra */
+            padding-bottom: 10px;
+            height: calc(100% - 80px - 15px); /* Altura restante - padding top de h3 - padding bottom de la barra */
+            width: calc(100% - 40px); /* Ancho del área de visualización */
+            left: 20px; /* Alineado con la barra */
+        }
+        .comparison-item-display.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .comparison-item-display .shape-bar {
+            height: 20px; /* Altura de la barra de forma */
+            background-color: #FFC845; /* Color por defecto */
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .comparison-item-display .item-label {
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            margin-top: 8px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .comparison-item-display .item-size {
+            color: #ADD8E6;
+            font-size: 0.8em;
+            margin-top: 2px;
+        }
+
+        /* --- Estilos de la Escala Atómico-Molecular (Nueva Sección) --- */
+        .atomic-molecular-slide-container {
+            display: flex;
+            flex-direction: row;
+            height: auto;
+            width: 100%;
+            gap: 30px;
+        }
+        .atomic-molecular-left-col {
+            width: 58%; /* Más ancho para la escala visual */
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+        .atomic-molecular-right-col {
+            width: 42%; /* Más angosto para los cálculos */
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .atomic-visual-scale {
+            position: relative;
+            height: 200px; /* Altura de la barra visual */
+            background-color: rgba(0, 30, 60, 0.9); /* Fondo oscuro para la escala (más opaco) */
+            border-radius: 10px;
+            margin-top: 20px; /* Ajuste para espacio con subtítulo */
+            display: flex;
+            align-items: flex-end; /* Alinear abajo para las barras */
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.3); /* Más opaco */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Más opaco */
+        }
+        .atomic-visual-scale .atom-label-big {
+            position: absolute;
+            top: 5px;
+            font-size: 0.9em;
+            color: #ADD8E6;
+            white-space: nowrap;
+        }
+        .atomic-visual-scale .scale-bar-labels {
+            position: absolute;
+            bottom: 5px;
+            width: calc(100% - 20px); /* Ancho de la barra - padding */
+            left: 10px;
+            display: flex;
+            justify-content: space-between;
+            color: #ADD8E6;
+            font-size: 0.8em;
+        }
+        .atomic-object-card { /* Tarjetas de objetos en la escala visual */
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end; /* Alinear iconos abajo */
+            background-color: rgba(255,255,255,0.2); /* Fondo semitransparente para la tarjeta (más opaco) */
+            border-radius: 8px;
+            padding: 8px 5px;
+            border: 1px solid rgba(255,255,255,0.4); /* Más opaco */
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4); /* Más opaco */
+            transition: all 0.3s ease;
+            transform-origin: bottom center; /* Escalar desde la base */
+            bottom: 0px; /* Ajuste para que los iconos estén en la base */
+            height: 100%; /* La altura se controla por JS */
+            box-sizing: border-box;
+        }
+        .atomic-object-card:hover {
+            transform: scale(1.05);
+            background-color: rgba(255,255,255,0.3); /* Más opaco */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6); /* Más opaco */
+            border-color: #FFC845;
+        }
+        .atomic-object-card.active-atomic { /* Estilo para el elemento activo */
+            border-color: #FFC845;
+            box-shadow: 0 0 20px rgba(255, 200, 69, 0.95); /* Más opaco */
+            background-color: rgba(255,255,255,0.4); /* Más opaco */
+        }
+
+        .atomic-object-card .icon-display {
+            font-size: 2.5em; /* Iconos más pequeños pero visibles */
+            color: #FFC845; /* Amarillo para iconos */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+            margin-bottom: 5px;
+        }
+        .atomic-object-card span { /* Nombre del elemento */
+            font-size: 0.8em;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+        }
+        .atomic-object-card .atomic-size { /* Tamaño del elemento */
+            font-size: 0.7em;
+            color: #ADD8E6;
+            white-space: nowrap;
+        }
+        .atomic-info-panel {
+            background-color: rgba(0, 45, 90, 0.95); /* Más opaco */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Más opaco */
+            border: 1px solid rgba(255,255,255,0.3); /* Más opaco */
+            min-height: 150px;
+        }
+        .atomic-info-panel h3 {
+            color: #FFC845;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: left;
+            border-left: none; /* Eliminar barra lateral */
+            padding-left: 0;
+        }
+        .atomic-info-panel p {
+            color: #F0F8FF;
+            font-size: 1em;
+        }
+        .atomic-info-panel .info-compare-line {
+            color: #ADD8E6;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .atomic-info-panel .info-compare-line i {
+            margin-right: 8px;
+            color: #FFC845;
+        }
+
+        .atomic-calc-box {
+            background-color: rgba(0, 50, 100, 0.95); /* Más opaco */
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.5); /* Más opaco */
+            border: 1px solid rgba(255,255,255,0.3); /* Más opaco */
+            margin-top: 30px;
+        }
+        .atomic-calc-box h3 {
+            color: #FFC845;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            text-align: center;
+            border-left: none;
+            padding-left: 0;
+        }
+        .atomic-calc-img-container {
+            position: relative;
+            width: 100px; /* Tamaño del icono/imagen simulado */
+            height: 100px;
+            background-color: rgba(255,255,255,0.2); /* Más opaco */
+            border-radius: 10px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4); /* Más opaco */
+        }
+        .atomic-calc-img-container .fas {
+            font-size: 4em;
+            color: #ADD8E6;
+        }
+        .atomic-calc-info {
+            color: white;
+            font-size: 0.9em;
+            text-align: right;
+            margin-right: 15px;
+        }
+        .atomic-calc-info .text-yellow-300 {
+            color: #FFC845;
+            font-weight: 600;
+        }
+        .atomic-calc-result {
+            color: #FFC845;
+            font-weight: bold;
+            font-size: 2em;
+            margin-left: auto;
+            text-align: left;
+        }
+        .atomic-calc-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .atomic-calc-line .border-t {
+            border-top: 1px solid rgba(255,255,255,0.4); /* Más opaco */
+            width: 100%;
+            margin-left: 5px;
+            padding-top: 5px;
+        }
+        .atomic-calc-curiosity {
+            background-color: rgba(255, 200, 69, 0.3); /* Más opaco */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: inset 0 0 10px rgba(255, 200, 69, 0.4); /* Más opaco */
+            border: 1px solid #FFC845;
+        }
+        .atomic-calc-curiosity h3 {
+            color: #FFC845;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: left;
+            border-left: none;
+            padding-left: 0;
+        }
+        .atomic-calc-curiosity p {
+            color: #F0F8FF;
+            font-size: 0.95em;
+        }
+
+        /* --- Estilos de Actividades (Sección 3) --- */
+        .activity {
+            padding: 35px;
+            margin-top: 60px;
+            background-color: rgba(0, 40, 80, 0.9); /* Mayor opacidad */
+            border-radius: 10px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .activity h3 {
+            color: #FFC845; /* Amarillo para títulos de actividad */
+            font-weight: 600;
+        }
+
+        .activity-content {
+            margin-top: 30px;
+        }
+
+        /* Actividad 1: Comparaciones */
+        .comparison-question {
+            margin-bottom: 30px;
+            background-color: rgba(0, 30, 60, 0.9); /* Mayor opacidad */
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.5); /* Mayor opacidad */
+            font-size: 1.15em;
+            font-weight: 500;
+        }
+        .comparison-question p {
+            color: white;
+        }
+
+        .comparison-options button {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            margin-right: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .comparison-options button:hover {
+            background: linear-gradient(to right, #2980b9, #1a5276);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+        }
+
+        .comparison-options button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .comparison-feedback {
+            margin-top: 20px;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+            color: white; /* Texto blanco para feedback */
+            border: 1px solid; /* Borde según el feedback */
+        }
+
+        .feedback-correct {
+            background-color: #27ae60;
+            border-color: #229954;
+        }
+
+        .feedback-incorrect {
+            background-color: #e74c3c;
+            border-color: #c0392b;
+        }
+
+        /* Actividad 2: Categorización (Drag & Drop) */
+        .drag-drop-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .draggable-item {
+            background: linear-gradient(to bottom right, #f39c12, #e67e22);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: grab;
+            font-size: 1.05em;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background 0.3s ease, transform 0.1s ease;
+            user-select: none;
+            text-align: center;
+            flex-grow: 1;
+            min-width: 140px;
+            max-width: 200px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+        .draggable-item:hover {
+             background: linear-gradient(to bottom right, #e67e22, #d35400);
+        }
+
+        .drop-target {
+            background-color: rgba(0, 60, 120, 0.7); /* Mayor opacidad */
+            border: 3px dashed #FFC845; /* Borde punteado amarillo */
+            border-radius: 12px;
+            min-height: 200px;
+            padding: 25px;
+            text-align: center;
+            font-weight: 600;
+            color: #FFC845; /* Texto amarillo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            flex-grow: 1;
+            min-width: 280px;
+            box-sizing: border-box;
+        }
+        .drop-target h4 { /* Títulos de las categorías de drag-drop */
+            color: #FFC845;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8em;
+        }
+        .drop-target p { /* Texto de descripción en las categorías */
+            color: #ADD8E6;
+            font-size: 0.9em;
+        }
+
+
+        .drop-target.hover {
+            background-color: rgba(0, 80, 160, 0.9); /* Mayor opacidad */
+            border-color: #ADD8E6; /* Borde azul claro */
+            box-shadow: 0 0 20px rgba(255, 200, 69, 0.9); /* Mayor opacidad */
+        }
+
+        .dropped-item {
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 0.95em;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reset-button {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 40px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .reset-button:hover {
+            background: linear-gradient(to right, #c0392b, #a03020);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+        }
+
+        /* Actividad 2b: Emparejar Dimensión */
+        .match-dimension-question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: rgba(0, 30, 60, 0.9); /* Mayor opacidad */
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2); /* Mayor opacidad */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4); /* Mayor opacidad */
+            font-size: 1.15em;
+        }
+        .match-dimension-question p {
+            color: white;
+        }
+
+
+        .match-dimension-question select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-left: 15px;
+            font-size: 1em;
+            background-color: rgba(0, 50, 100, 0.95); /* Mayor opacidad */
+            color: white;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); /* Mayor opacidad */
+            appearance: none; /* Elimina estilo nativo del select */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23FFC845'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'%3E%3C/path%3E%3C/svg%3E"); /* Flecha SVG personalizada */
+            background-repeat: no-repeat;
+            background-position: right 0.7em center;
+            background-size: 0.8em 0.8em;
+        }
+        .match-dimension-question select option {
+            background-color: rgba(0, 50, 100, 1); /* Asegura que el fondo de las opciones sea oscuro */
+            color: white;
+        }
+
+        .match-dimension-question button {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+
+        .match-dimension-question button:hover {
+            background: linear-gradient(to right, #27ae60, #229954);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        /* --- Estilos de la Naturaleza Corpuscular (Sección 4) --- */
+        .corpuscular-nature-section {
+            text-align: center;
+            padding: 40px;
+            margin-top: 60px;
+            background-color: rgba(0, 40, 80, 0.9); /* Mayor opacidad */
+            border-radius: 10px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .corpuscular-nature-section .icon {
+            font-size: 10em;
+            color: #FFC845;
+            margin-top: 40px;
+            animation: pulse 2s infinite alternate;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 0.8; }
+            to { transform: scale(1.05); opacity: 1; }
+        }
+
+        /* --- Estilos de la Conclusión (Sección 5) --- */
+        .conclusion {
+            text-align: center;
+            margin-top: 70px;
+            padding: 40px;
+            background-color: rgba(0, 50, 100, 0.98); /* Mayor opacidad */
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.3); /* Mayor opacidad */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .conclusion p {
+            font-size: 1.3em;
+            color: #F0F8FF;
+            font-weight: 400;
+        }
+
+        .conclusion ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 25px;
+        }
+
+        .conclusion ul li {
+            margin-bottom: 12px;
+            font-size: 1.2em;
+            color: #ADD8E6;
+            line-height: 1.4;
+        }
+
+        .conclusion ul li a {
+            color: #FFC845;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s ease;
+        }
+
+        .conclusion ul li a:hover {
+            text-decoration: underline;
+            color: #ADD8E6;
+        }
+
+        /* Estilo específico para el link del video */
+        .video-link-container {
+            margin-top: 40px;
+        }
+
+        .video-link-container a {
+            display: inline-block;
+            background: linear-gradient(to right, #e74c3c, #c0392b); /* Gradiente rojo */
+            color: white;
+            padding: 18px 35px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.4em;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .video-link-container a:hover {
+            background: linear-gradient(to right, #c0392b, #a03020);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+
+        /* --- Media Queries para Responsive Design --- */
+        @media (max-width: 1024px) {
+            .main-container {
+                width: 98%;
+                padding: 30px;
+                margin: 20px auto;
+            }
+            h1 { font-size: 3em; }
+            h2 { font-size: 2.2em; }
+            h3 { font-size: 1.8em; }
+            p { font-size: 1.1em; }
+            .macroscopic-slide-container, .microscopic-slide-container, .atomic-molecular-slide-container {
+                flex-direction: column; /* Apilar columnas en tablets */
+            }
+            .macroscopic-left-col, .macroscopic-right-col,
+            .microscopic-left-col, .microscopic-right-col,
+            .atomic-molecular-left-col, .atomic-molecular-right-col {
+                width: 100%;
+                padding: 0;
+            }
+            .macroscopic-display-area, .comparison-container, .atomic-visual-scale {
+                height: 250px; /* Reducir altura en pantallas más pequeñas */
+            }
+            .macroscopic-display-area .display-icon {
+                font-size: 6em;
+            }
+            .micro-object-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Más compacto */
+            }
+            .micro-object-card {
+                padding: 8px;
+            }
+            .micro-object-card .icon-display {
+                font-size: 3em;
+            }
+            .micro-object-card h3 {
+                font-size: 1em;
+            }
+            .micro-object-card p {
+                font-size: 0.7em;
+            }
+
+            .atomic-object-card {
+                padding: 5px; /* Más padding para los átomos */
+            }
+            .atomic-object-card .icon-display {
+                font-size: 2em; /* Iconos un poco más pequeños */
+            }
+            .atomic-object-card span {
+                font-size: 0.7em;
+            }
+            .atomic-object-card .atomic-size {
+                font-size: 0.6em;
+            }
+            .atomic-info-panel h3 {
+                font-size: 1.3em;
+            }
+            .atomic-info-panel p {
+                font-size: 0.9em;
+            }
+            .atomic-calc-box h3 {
+                font-size: 1.5em;
+            }
+            .atomic-calc-result {
+                font-size: 1.5em;
+            }
+
+            .macroscopic-object-card {
+                padding: 10px;
+            }
+            .macroscopic-object-card .text-3xl {
+                font-size: 2em;
+            }
+            .macroscopic-object-card h3 {
+                font-size: 1.1em;
+            }
+            .macroscopic-scale-marker-label {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+            }
+            h1 { font-size: 2.2em; margin-bottom: 40px;}
+            h2 { font-size: 1.8em; margin-top: 40px;}
+            h3 { font-size: 1.5em; padding-left: 15px;}
+            p { font-size: 1em; }
+
+            .section-block {
+                padding: 25px;
+                margin-bottom: 50px;
+            }
+
+            .unit-step {
+                font-size: 1.1em;
+                padding: 12px 20px;
+            }
+            .ruler-interactive {
+                height: 60px;
+            }
+            .cm-label {
+                font-size: 0.8em;
+            }
+            .mm-segment {
+                font-size: 0.9em;
+            }
+            .zoom-question {
+                font-size: 1.1em;
+            }
+            .zoom-answer {
+                font-size: 1.3em;
+                padding: 10px 20px;
+            }
+            .ruler-section-icon {
+                font-size: 8em;
+            }
+
+            .scale-bar-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            .scale-item {
+                height: 180px;
+                padding: 15px;
+            }
+            .scale-item .icon {
+                font-size: 3.5em;
+            }
+            .scale-item span {
+                font-size: 1.05em;
+            }
+
+            .scale-description-display {
+                min-height: 200px;
+                padding: 20px;
+            }
+            .scale-description-display .icon {
+                font-size: 5em;
+            }
+            .scale-description-display h4 {
+                font-size: 1.6em;
+            }
+
+            .activity {
+                padding: 25px;
+            }
+            .comparison-options button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 15px;
+                font-size: 0.95em;
+                padding: 12px 20px;
+            }
+
+            .drag-drop-area {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .drop-target, .draggable-item {
+                min-width: unset;
+                width: 100%;
+                max-width: none;
+            }
+            .drop-target h4 {
+                font-size: 1.5em;
+            }
+            .drop-target p {
+                font-size: 0.85em;
+            }
+
+            .match-dimension-question select,
+            .match-dimension-question button {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 15px;
+            }
+
+            .corpuscular-nature-section .icon {
+                font-size: 8em;
+            }
+            .conclusion p {
+                font-size: 1.1em;
+            }
+            .conclusion ul li {
+                font-size: 1em;
+            }
+            .video-link-container a {
+                padding: 15px 30px;
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 15px;
+            }
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            h3 { font-size: 1.3em; padding-left: 10px;}
+
+            .unit-step {
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+            .ruler-interactive {
+                height: 50px;
+            }
+            .mm-segment {
+                font-size: 0.8em;
+            }
+            .zoom-answer {
+                font-size: 1.1em;
+                padding: 8px 15px;
+            }
+            .ruler-section-icon {
+                font-size: 6em;
+            }
+
+            .scale-bar-grid {
+                grid-template-columns: 1fr; /* Una columna en móviles muy pequeños */
+                gap: 10px;
+            }
+            .scale-item {
+                height: 150px;
+                padding: 10px;
+            }
+            .scale-item .icon {
+                font-size: 3em;
+            }
+            .scale-item span {
+                font-size: 1em;
+            }
+
+            .macroscopic-display-area, .comparison-container, .atomic-visual-scale {
+                height: 200px; /* Reducir altura en móviles */
+            }
+            .macroscopic-display-area .display-icon, .atomic-visual-scale .icon-display {
+                font-size: 5em;
+            }
+            .macroscopic-display-area .size-indicator {
+                font-size: 1.2em;
+            }
+            .macroscopic-comparison-box p {
+                font-size: 0.7em;
+            }
+
+            .activity {
+                padding: 15px;
+            }
+            .comparison-question {
+                padding: 15px;
+                font-size: 1em;
+            }
+            .draggable-item {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+            .drop-target h4 {
+                font-size: 1.3em;
+            }
+            .match-dimension-question {
+                font-size: 1em;
+            }
+            .match-dimension-question select,
+            .match-dimension-question button {
+                font-size: 0.9em;
+                padding: 8px;
+            }
+
+            .corpuscular-nature-section .icon {
+                font-size: 6em;
+            }
+            .conclusion p {
+                font-size: 1em;
+            }
+            .conclusion ul li {
+                font-size: 0.9em;
+            }
+            .video-link-container a {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fondo con patrón sutil que cubre toda la ventana -->
+    <div class="pattern-bg"></div>
+
+    <div class="main-container">
+        <!-- Sección de Introducción -->
+        <section class="section-block" id="intro">
+            <h1>Más Allá de lo que el Ojo Puede Ver: Un Viaje al Mundo de los Átomos y las Partículas Diminutas</h1>
+            <p class="mb-4 text-center highlight"><strong>Esta web ha sido diseñada para ser acompañada con el archivo PDF "000 - Escalas - Comparaciones de tamaños 2024.pdf" para una experiencia de aprendizaje completa.</strong></p>
+            <p>Bienvenidos a un fascinante viaje para descubrir el tamaño de las cosas que nos rodean, ¡desde lo más grande que podemos ver hasta lo más minúsculo que apenas podemos imaginar! Todo en el universo, desde una imponente montaña hasta la más pequeña brizna de hierba, e incluso nosotros mismos, estamos hechos de bloques de construcción increíblemente pequeños. Comprender estas "escalas" nos ayuda a entender cómo funciona el mundo, cómo se desarrollan las medicinas, por qué los materiales se comportan de cierta manera y mucho más.</p>
+            <p>Prepárense para cambiar su perspectiva y asombrarse con las dimensiones que existen más allá de su vista.</p>
+        </section>
+
+        <!-- Sección 1: La Escalera de Medición -->
+        <section class="section-block" id="measurement-ladder">
+            <h2>La Escalera de Medición: Cómo Medimos lo Muy Pequeño</h2>
+            <p>Para hablar de tamaños tan variados, usamos diferentes unidades de medida. El <strong>Metro (m)</strong> es nuestra unidad de partida, como una regla grande. Pero, ¿qué pasa cuando las cosas son más pequeñas que un centímetro?</p>
+
+            <div class="measurement-ladder">
+                <div class="unit-step">Metro (m)</div>
+                <div class="unit-step">Decímetro (dm): 0.1 m</div>
+                <div class="unit-step">Centímetro (cm): 0.01 m</div>
+                <div class="unit-step">Milímetro (mm): 0.001 m</div>
+                <div class="unit-step">Micrómetro (µm): 0.001 mm (También llamado Micrón)</div>
+                <div class="unit-step">Nanómetro (nm): 0.001 µm</div>
+                <div class="unit-step">Amstrong (Å): 0.1 nm</div>
+                <div class="unit-step">Picómetro (pm): 0.001 nm</div>
+            </div>
+
+            <h3>Interactividad: ¿Cuántos milímetros caben en 1 centímetro?</h3>
+            <p class="zoom-question">Arrastra el segmento verde para ver cuántos caben en el "1 cm".</p>
+            <div class="ruler-interactive" id="rulerInteractive">
+                <!-- CM marks -->
+                <div class="cm-mark" style="left: 0%;"></div><span class="cm-label" style="left: 2%;">0 cm</span>
+                <div class="cm-mark" style="left: 99%;"></div><span class="cm-label" style="left: 95%;">1 cm</span>
+                <!-- Millimeter segments (initially just one visible) -->
+                <div class="mm-segment" style="width: 10%;" draggable="true" data-mm-count="1">1 mm</div>
+            </div>
+            <p class="zoom-answer" id="mmCountFeedback">¡Arrastra el segmento para descubrirlo!</p>
+            <!-- Icono representativo de regla/medición -->
+            <i class="fas fa-ruler-horizontal ruler-section-icon"></i>
+            <p style="text-align: center; font-style: italic; color: #ADD8E6; font-size: 0.9em;">Representación de una regla con milímetros y centímetros.</p>
+        </section>
+
+        <!-- Sección 2: De lo Macro a lo Micro y a lo Atómico (Organizado) -->
+        <section class="section-block" id="scales-comparison">
+            <h2>Nuestro Mundo en Diferentes Aumentos: De lo Cotidiano a los Átomos</h2>
+            <p>La siguiente sección te muestra ejemplos de objetos y organismos a diferentes escalas. Haz clic en cada uno para ver su descripción y tamaño.</p>
+
+            <h3>Escala de Magnitud</h3>
+            <div class="scale-bar-grid">
+                <!-- Cada scale-item representará un objeto clicable -->
+                <div class="scale-item" data-id="hormiga">
+                    <i class="icon fa-solid fa-bug"></i>
+                    <span>Hormiga</span>
+                </div>
+                <div class="scale-item" data-id="arena">
+                    <i class="icon fa-solid fa-mountain"></i>
+                    <span>Grano de Arena</span>
+                </div>
+                <div class="scale-item" data-id="grano-sal">
+                    <i class="icon fa-solid fa-cube"></i>
+                    <span>Grano de Sal</span>
+                </div>
+                <div class="scale-item" data-id="pelo">
+                    <i class="icon fa-solid fa-hair-alt"></i>
+                    <span>Grosor de un Pelo</span>
+                </div>
+                <div class="scale-item" data-id="celula-cebolla">
+                    <i class="icon fa-solid fa-leaf"></i>
+                    <span>Célula de Cebolla</span>
+                </div>
+                <div class="scale-item" data-id="celula-piel">
+                    <i class="icon fa-solid fa-hand-sparkles"></i>
+                    <span>Célula de la Piel</span>
+                </div>
+                <div class="scale-item" data-id="bacteria">
+                    <i class="icon fa-solid fa-bacteria"></i>
+                    <span>Bacteria</span>
+                </div>
+                <div class="scale-item" data-id="coronavirus">
+                    <i class="icon fa-solid fa-virus"></i>
+                    <span>Coronavirus</span>
+                </div>
+                <div class="scale-item" data-id="sacarosa">
+                    <i class="icon fa-solid fa-flask"></i> <!-- Icono de matraz para molécula -->
+                    <span>Molécula de Sacarosa</span>
+                </div>
+                <div class="scale-item" data-id="glucosa">
+                    <i class="icon fa-solid fa-flask"></i> <!-- Icono de matraz para molécula -->
+                    <span>Molécula de Glucosa</span>
+                </div>
+                <div class="scale-item" data-id="cesio">
+                    <i class="icon fa-solid fa-atom"></i>
+                    <span>Átomo de Cesio</span>
+                </div>
+                <div class="scale-item" data-id="agua">
+                    <i class="icon fa-solid fa-tint"></i>
+                    <span>Molécula de Agua</span>
+                </div>
+                <div class="scale-item" data-id="oxigeno">
+                    <span class="icon">O</span>
+                    <span>Átomo de Oxígeno</span>
+                </div>
+                <div class="scale-item" data-id="hidrogeno">
+                    <span class="icon">H</span>
+                    <span>Átomo de Hidrógeno</span>
+                </div>
+                <div class="scale-item" data-id="filo-cuchillo">
+                    <i class="icon fa-solid fa-knife-b"></i>
+                    <span>Filo de Cuchillo</span>
+                </div>
+                <div class="scale-item" data-id="filo-afeitar">
+                    <i class="icon fa-solid fa-razor"></i>
+                    <span>Filo de Hoja de Afeitar</span>
+                </div>
+            </div>
+
+            <div class="scale-description-display" id="scaleDescription">
+                <h4>Haz clic en un elemento para ver su descripción y un icono representativo.</h4>
+                <p>Aquí verás información detallada del objeto seleccionado.</p>
+            </div>
+        </section>
+
+        <!-- Sección 2.1: El Mundo Macroscópico (Integrado del nuevo diseño) -->
+        <section class="section-block" id="macroscopic-world">
+            <h2>Explorando el Mundo Macroscópico: Lo que puedes ver a simple vista</h2>
+            <div class="macroscopic-slide-container">
+                <!-- Columna izquierda - Texto explicativo -->
+                <div class="macroscopic-left-col content-text text-lg">
+                    <p class="mb-4">La <span class="highlight">escala macroscópica</span> comprende todo aquello que podemos ver a simple vista, sin necesidad de instrumentos especiales.</p>
+                    
+                    <p class="mb-6">Estos objetos cotidianos son los más grandes en nuestra escala de tamaños, pero aún así están compuestos por partículas mucho más pequeñas.</p>
+                    
+                    <div class="bg-blue-800 p-5 rounded-lg shadow-lg mb-6">
+                        <h3 class="font-bold text-yellow-300 mb-3 text-xl">¿Sabías que...?</h3>
+                        <p>El ojo humano promedio puede distinguir objetos de hasta 0,1 mm en condiciones ideales, aproximadamente el grosor de un cabello.</p>
+                    </div>
+                    
+                    <!-- Tarjetas de objetos clicables -->
+                    <div class="grid grid-cols-3 gap-4 mt-6">
+                        <div class="macroscopic-object-card" data-object="hormiga-macro">
+                            <div class="text-3xl text-yellow-400 mb-2">
+                                <i class="fas fa-bug"></i>
+                            </div>
+                            <h3 class="text-white font-bold">Hormiga</h3>
+                            <p class="text-sm text-blue-200">4 mm</p>
+                        </div>
+                        
+                        <div class="macroscopic-object-card" data-object="arena-macro">
+                            <div class="text-3xl text-yellow-400 mb-2">
+                                <i class="fas fa-mountain"></i>
+                            </div>
+                            <h3 class="text-white font-bold">Arena</h3>
+                            <p class="text-sm text-blue-200">1 mm</p>
+                        </div>
+                        
+                        <div class="macroscopic-object-card" data-object="sal-macro">
+                            <div class="text-3xl text-yellow-400 mb-2">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                            <h3 class="text-white font-bold">Grano de Sal</h3>
+                            <p class="text-sm text-blue-200">0,5 mm</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Columna derecha - Visualización interactiva -->
+                <div class="macroscopic-right-col flex flex-col justify-between">
+                    <!-- Área de visualización de objetos -->
+                    <div id="macroscopic-object-display" class="macroscopic-display-area">
+                        <div class="object-display-content text-center">
+                            <!-- Icono o imagen del objeto actual -->
+                            <i id="current-macro-object-icon" class="display-icon fas fa-bug"></i>
+                            <div class="size-indicator">4 mm</div>
+                            <p id="macro-object-description" class="description-text">Las hormigas son insectos visibles a simple vista, con tamaños que rondan los 4 mm de longitud.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Barra de escala interactiva -->
+                    <div class="mb-4 mt-8">
+                        <h3 class="font-bold text-white text-lg mb-3 flex items-center">
+                            <i class="fas fa-ruler mr-2 text-yellow-400"></i> Barra Comparativa de Escala
+                        </h3>
+                        
+                        <div id="macroscopic-scale-bar" class="macroscopic-scale-bar mb-2 relative">
+                            <div class="absolute inset-0 flex">
+                                <!-- 10 divisiones para 5mm (cada una 0.5mm) -->
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full border-r border-blue-300 opacity-30 w-1/10"></div>
+                                <div class="flex-grow h-full w-1/10"></div>
+                            </div>
+                            
+                            <div id="macroscopic-scale-highlight" class="macroscopic-scale-highlight" style="width: 80%; left: 0%;"></div>
+                            
+                            <!-- Marcadores de objetos -->
+                            <div class="macroscopic-scale-marker" style="left: calc(80% - 8px);" data-object="hormiga-macro">
+                                <div class="macroscopic-scale-marker-dot"></div>
+                                <span class="macroscopic-scale-marker-label">Hormiga (4 mm)</span>
+                            </div>
+                            
+                            <div class="macroscopic-scale-marker" style="left: calc(20% - 8px);" data-object="arena-macro">
+                                <div class="macroscopic-scale-marker-dot"></div>
+                                <span class="macroscopic-scale-marker-label">Arena (1 mm)</span>
+                            </div>
+                            
+                            <div class="macroscopic-scale-marker" style="left: calc(10% - 8px);" data-object="sal-macro">
+                                <div class="macroscopic-scale-marker-dot"></div>
+                                <span class="macroscopic-scale-marker-label">Sal (0,5 mm)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Etiquetas de la barra de escala -->
+                        <div class="text-xs text-blue-200 flex justify-between px-2">
+                            <span>0 mm</span>
+                            <span>1 mm</span>
+                            <span>2 mm</span>
+                            <span>3 mm</span>
+                            <span>4 mm</span>
+                            <span>5 mm</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Caja de comparación -->
+                    <div class="macroscopic-comparison-box mt-8">
+                        <h3 class="font-bold text-yellow-300 mb-3 flex items-center justify-center">
+                            <i class="fas fa-balance-scale mr-2"></i> Comparaciones relativas
+                        </h3>
+                        <div class="flex items-end justify-center py-2">
+                            <div class="text-center px-4">
+                                <div class="relative-dot bg-yellow-500 mx-auto" style="width: 8px; height: 8px;"></div>
+                                <p class="text-xs text-white mt-1">Sal</p>
+                                <p class="text-xs text-blue-200">0,5 mm</p>
+                            </div>
+                            
+                            <div class="text-center px-4">
+                                <div class="relative-dot bg-yellow-500 mx-auto" style="width: 16px; height: 16px;"></div>
+                                <p class="text-xs text-white mt-1">Arena</p>
+                                <p class="text-xs text-blue-200">1 mm</p>
+                            </div>
+                            
+                            <div class="text-center px-4">
+                                <div class="relative-dot bg-yellow-500 mx-auto" style="width: 64px; height: 64px;"></div>
+                                <p class="text-xs text-white mt-1">Hormiga</p>
+                                <p class="text-xs text-blue-200">4 mm</p>
+                            </div>
+                        </div>
+                        <p class="text-center text-sm text-blue-200 mt-4">La hormiga es aproximadamente 8 veces más grande que un grano de sal y 4 veces más grande que un grano de arena en cada dimensión.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2.2: El Mundo Microscópico (Nueva Sección Integrada) -->
+        <section class="section-block" id="microscopic-world">
+            <h2>El Mundo Microscópico: Lo que necesitas un microscopio para ver</h2>
+            <div class="microscopic-slide-container">
+                <!-- Columna izquierda - Texto explicativo -->
+                <div class="microscopic-left-col content-text text-lg">
+                    <p class="mb-4">Cuando las cosas son <span class="highlight">demasiado pequeñas</span> para verlas a simple vista, necesitamos <span class="highlight">microscopios</span> para explorarlas.</p>
+                    
+                    <p class="mb-6">Este fascinante mundo microscópico incluye desde el grosor de un pelo humano hasta las células y bacterias que encontramos en todas partes.</p>
+                    
+                    <div class="bg-blue-800 p-4 rounded-lg shadow-lg mb-5">
+                        <h3 class="font-bold text-yellow-300 mb-2">¿Sabías que...?</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Un cabello humano tiene un grosor medio de aproximadamente 80 μm (micrómetros).</li>
+                            <li>Podrías alinear unas 12 células vegetales a lo largo del grosor de un pelo.</li>
+                            <li>¡Y hasta 80 bacterias en la misma distancia!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-900 bg-opacity-40 p-4 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2 flex items-center">
+                            <i class="fas fa-microscope mr-2"></i> Tipos de microscopios
+                        </h3>
+                        <div class="flex justify-between text-sm">
+                            <div class="flex-1 mr-2">
+                                <p class="font-bold text-yellow-200">Microscopio óptico:</p>
+                                <p>Usa luz visible y lentes. Aumentos de hasta 1500x.</p>
+                            </div>
+                            <div class="flex-1 ml-2">
+                                <p class="font-bold text-yellow-200">Microscopio electrónico:</p>
+                                <p>Usa electrones en lugar de luz. Aumentos de más de 500.000x.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Columna derecha - Visualización interactiva -->
+                <div class="microscopic-right-col flex flex-col">
+                    <!-- Galería de elementos microscópicos -->
+                    <div class="micro-object-grid">
+                        <div id="pelo-micro" class="micro-object-card active-micro" data-object="pelo-micro">
+                            <div class="icon-display"><i class="fas fa-hair-alt"></i></div>
+                            <h3 class="font-bold text-white">Pelo humano</h3>
+                            <p class="text-xs text-blue-200">80 μm</p>
+                        </div>
+                        
+                        <div id="celula-vegetal-micro" class="micro-object-card" data-object="celula-vegetal-micro">
+                            <div class="icon-display"><i class="fas fa-leaf"></i></div>
+                            <h3 class="font-bold text-white">Célula vegetal</h3>
+                            <p class="text-xs text-blue-200">50 μm</p>
+                        </div>
+                        
+                        <div id="celula-piel-micro" class="micro-object-card" data-object="celula-piel-micro">
+                            <div class="icon-display"><i class="fas fa-hand-sparkles"></i></div>
+                            <h3 class="font-bold text-white">Célula piel</h3>
+                            <p class="text-xs text-blue-200">35 μm</p>
+                        </div>
+                        
+                        <div id="filo-cuchillo-micro" class="micro-object-card" data-object="filo-cuchillo-micro">
+                            <div class="icon-display"><i class="fas fa-knife-b"></i></div>
+                            <h3 class="font-bold text-white">Filo cuchillo</h3>
+                            <p class="text-xs text-blue-200">10 μm</p>
+                        </div>
+                        
+                        <div id="filo-afeitar-micro" class="micro-object-card" data-object="filo-afeitar-micro">
+                            <div class="icon-display"><i class="fas fa-razor"></i></div>
+                            <h3 class="font-bold text-white">Filo afeitar</h3>
+                            <p class="text-xs text-blue-200">1 μm</p>
+                        </div>
+                        
+                        <div id="bacteria-micro" class="micro-object-card" data-object="bacteria-micro">
+                            <div class="icon-display"><i class="fas fa-bacteria"></i></div>
+                            <h3 class="font-bold text-white">Bacteria</h3>
+                            <p class="text-xs text-blue-200">1-2 μm</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Comparación interactiva de tamaños -->
+                    <div class="comparison-container">
+                        <h3 class="font-bold text-yellow-300 text-xl p-3">Comparación de tamaños</h3>
+                        
+                        <!-- Elementos de comparación que se mostrarán -->
+                        <div id="comp-pelo-micro" class="comparison-item-display active" style="left: 20%;">
+                            <div class="shape-bar bg-yellow-400" style="width: 80%;"></div> <!-- Max width 80% for 80um -->
+                            <span class="item-label">Pelo humano</span>
+                            <span class="item-size">80 μm</span>
+                        </div>
+                        
+                        <div id="comp-celula-vegetal-micro" class="comparison-item-display" style="left: 20%;">
+                            <div class="shape-bar bg-green-400" style="width: 50%;"></div> <!-- 50um -->
+                            <span class="item-label">Célula vegetal</span>
+                            <span class="item-size">50 μm</span>
+                        </div>
+                        
+                        <div id="comp-celula-piel-micro" class="comparison-item-display" style="left: 20%;">
+                            <div class="shape-bar bg-red-400" style="width: 35%;"></div> <!-- 35um -->
+                            <span class="item-label">Célula de la piel</span>
+                            <span class="item-size">35 μm</span>
+                        </div>
+                        
+                        <div id="comp-filo-cuchillo-micro" class="comparison-item-display" style="left: 20%;">
+                            <div class="shape-bar bg-blue-400" style="width: 10%;"></div> <!-- 10um -->
+                            <span class="item-label">Filo cuchillo</span>
+                            <span class="item-size">10 μm</span>
+                        </div>
+                        
+                        <div id="comp-filo-afeitar-micro" class="comparison-item-display" style="left: 20%;">
+                            <div class="shape-bar bg-purple-400" style="width: 1%;"></div> <!-- 1um -->
+                            <span class="item-label">Filo afeitar</span>
+                            <span class="item-size">1 μm</span>
+                        </div>
+                        
+                        <div id="comp-bacteria-micro" class="comparison-item-display" style="left: 20%;">
+                            <div class="shape-bar bg-pink-400" style="width: 1%;"></div> <!-- 1um -->
+                            <span class="item-label">Bacteria</span>
+                            <span class="item-size">1-2 μm</span>
+                        </div>
+                        
+                        <!-- Barra de escala -->
+                        <div class="comparison-bar">
+                            <div class="scale-ruler">
+                                <div class="scale-mark" style="left: 0%"></div>
+                                <div class="scale-label" style="left: 0%">0 μm</div>
+                                
+                                <div class="scale-mark" style="left: 20%"></div>
+                                <div class="scale-label" style="left: 20%">20 μm</div>
+                                
+                                <div class="scale-mark" style="left: 40%"></div>
+                                <div class="scale-label" style="left: 40%">40 μm</div>
+                                
+                                <div class="scale-mark" style="left: 60%"></div>
+                                <div class="scale-label" style="left: 60%">60 μm</div>
+                                
+                                <div class="scale-mark" style="left: 80%"></div>
+                                <div class="scale-label" style="left: 80%">80 μm</div>
+                                
+                                <div class="scale-mark" style="left: 100%"></div>
+                                <div class="scale-label" style="left: 100%">100 μm</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Información adicional contextual -->
+                    <div class="mt-4 bg-yellow-600 bg-opacity-20 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-1 flex items-center text-lg">
+                            <i class="fas fa-lightbulb mr-2"></i> ¿Sabías que...?
+                        </h3>
+                        <p class="text-white text-sm">Si ampliáramos una bacteria al tamaño de una moneda, un átomo sería más pequeño que un grano de arena. ¡Así de grande es la diferencia entre la escala microscópica y la atómica!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2.3: Escala Atómico-Molecular (Nueva Sección Integrada) -->
+        <section class="section-block" id="atomic-molecular-world">
+            <h2>Escala Atómico-Molecular: Lo más diminuto del universo</h2>
+            <div class="atomic-molecular-slide-container">
+                <!-- Columna izquierda - Mundo atómico-molecular -->
+                <div class="atomic-molecular-left-col">
+                    <div class="content-text mb-4">
+                        <p class="mb-3">Estas entidades son tan <span class="highlight">increíblemente pequeñas</span> que necesitamos herramientas muy especiales para detectarlas:</p>
+                    </div>
+                    
+                    <!-- Escala visual de tamaños -->
+                    <div class="atomic-visual-scale">
+                        <span class="atom-label-big" style="left: 5%;">Virus (grande)</span>
+                        <span class="atom-label-big" style="left: 40%;">Moléculas</span>
+                        <span class="atom-label-big" style="left: 75%;">Átomos (pequeño)</span>
+                        
+                        <!-- Línea base de la escala -->
+                        <div class="absolute inset-x-0 bottom-0 h-1 bg-yellow-400 rounded-full mx-2 mb-2"></div>
+
+                        <!-- Elementos de la escala atómico-molecular -->
+                        <div class="atomic-object-card active-atomic" style="left: 5%; width: 15%; height: 80%;" data-object="coronavirus-atomic">
+                            <div class="icon-display"><i class="fas fa-virus"></i></div>
+                            <span>Coronavirus</span>
+                            <span class="atomic-size">127 nm</span>
+                        </div>
+                        
+                        <div class="atomic-object-card" style="left: 25%; width: 15%; height: 65%;" data-object="sacarosa-atomic">
+                            <div class="icon-display"><i class="fas fa-flask"></i></div> <!-- Icono de matraz para sacarosa -->
+                            <span>Sacarosa</span>
+                            <span class="atomic-size">1 nm</span>
+                        </div>
+                        
+                        <div class="atomic-object-card" style="left: 45%; width: 15%; height: 50%;" data-object="glucosa-atomic">
+                            <div class="icon-display"><i class="fas fa-flask"></i></div> <!-- Icono de matraz para glucosa -->
+                            <span>Glucosa</span>
+                            <span class="atomic-size">0.5 nm</span>
+                        </div>
+                        
+                        <div class="atomic-object-card" style="left: 65%; width: 15%; height: 45%;" data-object="cesio-atomic">
+                            <div class="icon-display"><i class="fas fa-atom"></i></div>
+                            <span>Cesio</span>
+                            <span class="atomic-size">0.52 nm</span>
+                        </div>
+                        
+                        <div class="atomic-object-card" style="left: 85%; width: 10%; height: 30%;" data-object="agua-atomic">
+                            <div class="icon-display"><i class="fas fa-tint"></i></div>
+                            <span>Agua</span>
+                            <span class="atomic-size">0.2 nm</span>
+                        </div>
+                        
+                        <div class="scale-bar-labels">
+                            <span>0 nm</span>
+                            <span>50 nm</span>
+                            <span>100 nm</span>
+                            <span>150 nm</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Info panel para elementos seleccionados -->
+                    <div class="atomic-info-panel" id="atomic-info-panel">
+                        <h3 id="atomic-info-title">Selecciona un elemento para más información</h3>
+                        <p id="atomic-info-desc">Haz clic en cualquiera de los elementos de la escala para ver detalles.</p>
+                        <div class="info-compare-line" id="atomic-info-compare">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Las comparaciones aparecerán aquí.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Comparación con más átomos (grid) -->
+                    <div class="grid grid-cols-3 gap-3 mt-6">
+                        <div class="scale-item bg-blue-800 bg-opacity-40 p-2 rounded-lg text-center" data-id="hierro">
+                            <i class="icon fa-solid fa-atom text-blue-300 mb-1"></i>
+                            <h4 class="text-white text-xs font-bold">Hierro</h4>
+                            <p class="text-blue-200 text-xs">0.28 nm</p>
+                        </div>
+                        <div class="scale-item bg-blue-800 bg-opacity-40 p-2 rounded-lg text-center" data-id="cloro">
+                            <i class="icon fa-solid fa-atom text-green-300 mb-1"></i>
+                            <h4 class="text-white text-xs font-bold">Cloro</h4>
+                            <p class="text-blue-200 text-xs">0.2 nm</p>
+                        </div>
+                        <div class="scale-item bg-blue-800 bg-opacity-40 p-2 rounded-lg text-center" data-id="hidrogeno-atom"> <!-- Corregido a hidrogeno-atom -->
+                            <i class="icon fa-solid fa-atom text-red-300 mb-1"></i>
+                            <h4 class="text-white text-xs font-bold">Hidrógeno</h4>
+                            <p class="text-blue-200 text-xs">0.07 nm</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Columna derecha - Cálculos y comparaciones -->
+                <div class="atomic-molecular-right-col">
+                    <!-- Cálculo de átomos en grano de sal -->
+                    <div class="atomic-calc-box">
+                        <h3>
+                            <i class="fas fa-calculator mr-2"></i>
+                            ¿Cuántos átomos caben?
+                        </h3>
+                        
+                        <div class="atomic-calc-img-container">
+                            <i class="fas fa-seedling"></i> <!-- Icono para representar algo pequeño como un grano -->
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-white font-bold">Grano de sal</h4>
+                            <p class="text-blue-200 text-sm">≈ 0.5 mm (500.000 nm)</p>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-900 bg-opacity-50 rounded-lg mt-4 mb-4">
+                            <h4 class="text-white text-sm font-bold mb-2 text-left">Átomos de oxígeno en un cristal de sal:</h4>
+                            <div class="atomic-calc-line">
+                                <div class="atomic-calc-info">
+                                    <p>Tamaño de grano de sal: <span class="text-yellow-300">0.5 mm</span></p>
+                                    <p>Tamaño de átomo de oxígeno: <span class="text-yellow-300">0.06 nm</span></p>
+                                </div>
+                            </div>
+                            <div class="atomic-calc-line">
+                                <span class="atomic-calc-info border-t w-full text-center pt-1">500.000 nm ÷ 0.06 nm/átomo</span>
+                            </div>
+                            <div class="atomic-calc-line justify-center mt-2">
+                                <div class="atomic-calc-result">
+                                    ≈ 8.333.333 <span class="text-lg">átomos</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-900 bg-opacity-50 rounded-lg">
+                            <h4 class="text-white text-sm font-bold mb-2 text-left">Átomos de hierro en una hoja de afeitar:</h4>
+                            <div class="atomic-calc-line">
+                                <div class="atomic-calc-info">
+                                    <p>Filo de hoja de afeitar: <span class="text-yellow-300">1 μm</span></p>
+                                    <p>Tamaño de átomo de hierro: <span class="text-yellow-300">0.14 nm</span></p>
+                                </div>
+                            </div>
+                            <div class="atomic-calc-line">
+                                <span class="atomic-calc-info border-t w-full text-center pt-1">1000 nm ÷ 0.14 nm/átomo</span>
+                            </div>
+                            <div class="atomic-calc-line justify-center mt-2">
+                                <div class="atomic-calc-result">
+                                    ≈ 7.143 <span class="text-lg">átomos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dato curioso -->
+                    <div class="atomic-calc-curiosity">
+                        <h3 class="font-bold text-yellow-300 mb-2 flex items-center">
+                            <i class="fas fa-lightbulb mr-2"></i> ¿Sabías que...?
+                        </h3>
+                        <p class="text-white">Si los átomos tuvieran el tamaño de una canica, un grano de sal sería aproximadamente del tamaño del Estadio Santiago Bernabéu.</p>
+                        <p class="text-blue-200 mt-2 text-sm">La materia parece continua, pero está formada por incontables partículas individuales con enormes espacios vacíos entre ellas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: Actividades Interactivas -->
+        <section class="section-block" id="activities">
+            <h2>Actividades Interactivas: ¡Pon a Prueba tus Conocimientos!</h2>
+
+            <!-- Actividad 1: Comparaciones -->
+            <div class="activity" id="activity1">
+                <h3>Actividad 1: Comparaciones de Tamaño</h3>
+                <p>Para cada par, haz clic en el objeto que consideres más grande.</p>
+                <div class="activity-content">
+                    <!-- Pregunta 1 -->
+                    <div class="comparison-question">
+                        <p>¿Qué es más largo?</p>
+                        <div class="comparison-options">
+                            <button onclick="checkComparison(this, 'pen', 'cellphone')">Un bolígrafo</button>
+                            <button onclick="checkComparison(this, 'cellphone', 'cellphone')">Un teléfono celular</button>
+                        </div>
+                        <p class="comparison-feedback"></p>
+                    </div>
+                    <!-- Pregunta 2 -->
+                    <div class="comparison-question">
+                        <p>¿Qué es más grande?</p>
+                        <div class="comparison-options">
+                            <button onclick="checkComparison(this, 'ant', 'ant')">Una hormiga (4 mm)</button>
+                            <button onclick="checkComparison(this, 'sand', 'ant')">Un grano de arena (1 mm)</button>
+                        </div>
+                        <p class="comparison-feedback"></p>
+                    </div>
+                    <!-- Pregunta 3 -->
+                    <div class="comparison-question">
+                        <p>¿Qué es más grande?</p>
+                        <div class="comparison-options">
+                            <button onclick="checkComparison(this, 'hair', 'salt')">El grosor de un pelo (80 µm)</button>
+                            <button onclick="checkComparison(this, 'salt', 'salt')">Un grano de sal (500 µm)</button>
+                        </div>
+                        <p class="comparison-feedback"></p>
+                    </div>
+                    <!-- Pregunta 4 -->
+                    <div class="comparison-question">
+                        <p>¿Qué es más grande?</p>
+                        <div class="comparison-options">
+                            <button onclick="checkComparison(this, 'virus', 'bacteria')">Un virus (127 nm)</button>
+                            <button onclick="checkComparison(this, 'bacteria', 'bacteria')">Una bacteria (1-2 µm)</button>
+                        </div>
+                        <p class="comparison-feedback"></p>
+                    </div>
+                    <!-- Pregunta 5 -->
+                    <div class="comparison-question">
+                        <p>¿Qué es más grande?</p>
+                        <div class="comparison-options">
+                            <button onclick="checkComparison(this, 'water_mol', 'virus')">Una molécula de agua (0.2 nm)</button>
+                            <button onclick="checkComparison(this, 'virus', 'virus')">Un virus (127 nm)</button>
+                        </div>
+                        <p class="comparison-feedback"></p>
+                    </div>
+                    <!-- Pregunta 6 -->
+                    <div class="comparison-question">
+                        <p>¿Cuántos átomos de oxígeno caben en fila a lo largo de un cristal de sal de 0.5 mm?</p>
+                        <div class="comparison-options">
+                            <button onclick="checkComparison(this, 'q6_1', 'q6_2')">En el orden de 100.000 átomos</button>
+                            <button onclick="checkComparison(this, 'q6_2', 'q6_2')">En el orden de 8.000.000 átomos</button>
+                        </div>
+                        <p class="comparison-feedback"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actividad 2: Categorización (Arrastrar y Soltar) -->
+            <div class="activity" id="activity2">
+                <h3>Actividad 2: Clasificación por Escala (Arrastrar y Soltar)</h3>
+                <p>Arrastra cada elemento a su categoría de escala correcta. ¡Puedes arrastrarlo a la categoría en la que crees que va!</p>
+                <div class="drag-drop-area">
+                    <div class="drop-target" data-target-category="macroscopica">
+                        <h4>Escala Macroscópica</h4>
+                        <p>(Simple vista)</p>
+                    </div>
+                    <div class="drop-target" data-target-category="microscopica">
+                        <h4>Escala Microscópica</h4>
+                        <p>(Microscopio óptico/electrónico)</p>
+                    </div>
+                    <div class="drop-target" data-target-category="atomico-molecular">
+                        <h4>Escala Atómico-Molecular</h4>
+                        <p>(Entidades muy pequeñas)</p>
+                    </div>
+                </div>
+
+                <div class="drag-container" id="draggableItems">
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Sacarosa</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Átomo de Cloro</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Glucosa</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Átomo de Hidrógeno</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Átomo de Cesio</div>
+                    <div class="draggable-item" draggable="true" data-category="microscopica">Filo de una hoja de afeitar</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Coronavirus</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Molécula de agua</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Átomo de Sodio</div>
+                    <div class="draggable-item" draggable="true" data-category="microscopica">Célula de la piel (animal)</div>
+                    <div class="draggable-item" draggable="true" data-category="macroscopica">Grosor de un Pelo</div>
+                    <div class="draggable-item" draggable="true" data-category="microscopica">Células vegetales (de cebolla)</div>
+                    <div class="draggable-item" draggable="true" data-category="macroscopica">Grano de SAL</div>
+                    <div class="draggable-item" draggable="true" data-category="macroscopica">Arena</div>
+                    <div class="draggable-item" draggable="true" data-category="macroscopica">Hormiga</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Átomo de Hierro</div>
+                    <div class="draggable-item" draggable="true" data-category="microscopica">Bacteria</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Átomo de oxígeno</div>
+                    <div class="draggable-item" draggable="true" data-category="atomico-molecular">Átomo de Carbono</div>
+                </div>
+                <button class="reset-button" onclick="resetDragDrop()">Reiniciar Actividad de Clasificación</button>
+            </div>
+
+            <!-- Actividad 2b: Emparejar Dimensión con Objeto -->
+            <div class="activity" id="activity2b">
+                <h3>Actividad 2b: Empareja la Dimensión con el Objeto</h3>
+                <p>Selecciona el objeto que corresponde a cada dimensión dada y haz clic en "Verificar".</p>
+                <div class="activity-content" id="matchDimensionContent">
+                    <!-- Las preguntas se cargarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 4: La Naturaleza Corpuscular de la Materia -->
+        <section class="corpuscular-nature-section" id="corpuscular-nature">
+            <h2>Todo Está Hecho de Pequeños Trozos: La Corpuscularidad de la Materia</h2>
+            <p>Hemos viajado a través de las escalas, desde lo que podemos ver con nuestros propios ojos hasta las unidades más pequeñas que componen todo. La idea fundamental es que la materia no es una masa continua, sino que está hecha de partículas discretas, como diminutos "ladrillos" invisibles. Esta es la esencia de la <strong>corpuscularidad de la materia</strong>.</p>
+            <p>Imagina que estás construyendo un enorme castillo con piezas de LEGO. Por muy grande y complejo que sea el castillo, en su esencia, está formado por piezas individuales de LEGO. De manera similar, todo lo que ves, tocas y sientes está compuesto por átomos y moléculas, los bloques de construcción fundamentales del universo.</p>
+            <p>Aunque no podemos ver estos "ladrillos" a simple vista, la ciencia nos ha dado herramientas y métodos indirectos (como microscopios avanzados y experimentos químicos) para entender que existen y cómo se comportan.</p>
+            <!-- Icono conceptual de zoom/estructura -->
+            <i class="fas fa-microscope corpuscular-nature-section icon"></i>
+            <p style="text-align: center; font-style: italic; color: #ADD8E6; font-size: 0.9em;">Representación conceptual de la materia desde lo macroscópico a lo atómico.</p>
+        </section>
+
+        <!-- Sección de Conclusión -->
+        <section class="section-block conclusion" id="conclusion">
+            <h2>Viendo el Mundo con Nuevos Ojos</h2>
+            <p>Esperamos que este viaje por las escalas de la materia les haya abierto una nueva perspectiva sobre el mundo que los rodea. Desde los objetos cotidianos hasta las partículas subatómicas, cada nivel de tamaño esconde un universo de conocimiento y maravillas.</p>
+            <p>Recordemos siempre que:</p>
+            <ul>
+                <li>La materia está compuesta por partículas discretas.</li>
+                <li>Utilizamos diferentes unidades de medida para hablar de tamaños muy pequeños.</li>
+                <li>Comprender estas escalas es fundamental para la ciencia y la tecnología.</li>
+            </ul>
+            <p>¡Los animamos a seguir explorando y haciendo preguntas! La ciencia es un viaje sin fin de descubrimiento.</p>
+            <h3>Video Adicional para Explorar:</h3>
+            <div class="video-link-container">
+                <a href="https://www.youtube.com/watch?v=ECnSByQNrEM" target="_blank">Ver video explicativo sobre escalas</a>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>
